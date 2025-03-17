@@ -68,7 +68,4 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.material.v1130alpha11)
     implementation(libs.google.firebase.auth)
-    implementation (libs.retrofit)
-    implementation (libs.converter.name)
-    implementation (libs.converter.gson)
 }
