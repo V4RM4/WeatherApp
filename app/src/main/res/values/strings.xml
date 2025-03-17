@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+    <string name="hello_there">Hello there!</string>
+    <string name="default_web_client_id">1028041765759-1957cqbng6hbcv9s5r352mt7ogl585uq.apps.googleusercontent.com</string>
+    <string name="welcome_to_weatherapp">Welcome\nto\nWeatherApp</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
 </resources>
