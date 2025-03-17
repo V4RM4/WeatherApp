@@ -39,6 +39,11 @@ class HomeActivity : AppCompatActivity() {
         homeBinding.signOutBtn.setOnClickListener{
             signOut()
         }
+
+        homeBinding.weatherStuffBtn.setOnClickListener{
+            val weatherIntent = Intent(this, WeatherActivity::class.java)
+            startActivity(weatherIntent)
+        }
     }
 
     private fun signOut() {

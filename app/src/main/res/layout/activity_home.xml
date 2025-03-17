@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/welcome_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,9 +22,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/signOutBtn"
-        android:text="Sign Out"
+        android:text="@string/sign_out"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -32,9 +32,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcome_user" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/weatherStuffBtn"
-        android:text="Weather"
+        android:text="@string/weather"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
