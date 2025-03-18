@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+weatherapp.properties
+/weatherapp.properties
