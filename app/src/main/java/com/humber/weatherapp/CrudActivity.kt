@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.humber.weatherapp.databinding.ActivityCrudBinding
 
@@ -34,6 +35,11 @@ class CrudActivity : AppCompatActivity() {
             crudBinding.saveCityBtn.setOnClickListener{
                 val userLocation = crudBinding.saveCityEt.text.toString()
 
+                if (userLocation.isEmpty()){
+                    Toast.makeText(this, "Please enter a city", Toast.LENGTH_LONG).show()
+                    return@setOnClickListener
+                }
+
                 val userData = hashMapOf(
                     "email" to currentUser.email,
                     "location" to userLocation,
@@ -56,12 +62,54 @@ class CrudActivity : AppCompatActivity() {
                         if(document.exists()){
                             val userData = document.data
                             val savedLocation = userData?.get("location")
-                            crudBinding.userCityTv.text = savedLocation.toString()
+                            crudBinding.userCityTv.text = savedLocation.toString().trim()
                         }
                     }
                     .addOnFailureListener { error ->
                         Toast.makeText(this, "Error retrieving document: ${error.message}", Toast.LENGTH_LONG).show()
                     }
+            }
+
+            crudBinding.updateCityBtn.setOnClickListener{
+                val updateLocation = crudBinding.updateUserCityEt.text.toString().trim()
+
+                if (updateLocation.isEmpty()){
+                    Toast.makeText(this, "Please enter a city", Toast.LENGTH_LONG).show()
+                    return@setOnClickListener
+                }
+
+                userDocument.update("location", updateLocation)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Location updated successfully", Toast.LENGTH_LONG).show()
+                    }
+                    .addOnFailureListener { error ->
+                        Toast.makeText(this, "${error.message}", Toast.LENGTH_LONG).show()
+                    }
+                // We can use hashmap like above for multiple updates at once
+            }
+
+            crudBinding.deleteCityBtn.setOnClickListener{
+
+//                 To delete the entire data of the user... cool but use caution
+//                userDocument.delete()
+//                    .addOnSuccessListener {
+//                        Toast.makeText(this, "Deleted successfully", Toast.LENGTH_LONG).show()
+//                    }
+//                    .addOnFailureListener { error ->
+//                        Toast.makeText(this, "${error.message}", Toast.LENGTH_LONG).show()
+//                    }
+
+                // instead we can delete just one particular data
+                // FieldValue class from firebase does this but we use the same update
+                // to apply the changes
+                userDocument.update("location", FieldValue.delete())
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Location deleted successfully", Toast.LENGTH_LONG).show()
+                    }
+                    .addOnFailureListener { error ->
+                        Toast.makeText(this, "${error.message}", Toast.LENGTH_LONG).show()
+                    }
+
             }
 
         } else {
