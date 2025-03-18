@@ -25,7 +25,7 @@ class WeatherActivity : AppCompatActivity() {
         requestQueue = Volley.newRequestQueue(this)
 
         weatherBinding.getWeathenBtn.setOnClickListener{
-            var city = weatherBinding.cityEt.text.toString().trim()
+            val city = weatherBinding.cityEt.text.toString().trim()
             if (city.isNotEmpty()){
                 fetchWeather(city)
             } else {
