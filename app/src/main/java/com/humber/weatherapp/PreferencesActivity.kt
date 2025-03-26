@@ -31,15 +31,31 @@ class PreferencesActivity : AppCompatActivity() {
             val userDocument = usersCollection.document(userId)
             userDocument.get()
                 .addOnSuccessListener { document ->
-                    if(document.exists()){
+                    if (document.exists()) {
                         val userData = document.data
-                        val savedLocation = userData?.get("location").toString()
-                        if (savedLocation == "null"){
-                            prefBinding.cityEditText.setText("")
-                        } else {
-                            prefBinding.cityEditText.setText(savedLocation)
-                        }
+                        val locationField = userData?.get("location")
 
+                        when (locationField) {
+                            null -> {
+                                // Handle null case
+                                prefBinding.cityEditText.setText("")
+                            }
+                            is List<*> -> {
+                                // Handle array/list case
+                                val locationList = locationField as List<*>
+                                if (locationList.isNotEmpty()) {
+                                    // Display the first location or join all locations
+                                    //Show just the first location
+                                    prefBinding.cityEditText.setText(locationList[0].toString())
+                                } else {
+                                    prefBinding.cityEditText.setText("")
+                                }
+                            }
+                            else -> {
+                                // Handle single string case (just in case)
+                                prefBinding.cityEditText.setText(locationField.toString())
+                            }
+                        }
                     }
                 }
                 .addOnFailureListener { error ->
@@ -50,7 +66,12 @@ class PreferencesActivity : AppCompatActivity() {
         prefBinding.btnSearch.setOnClickListener {
             val city = prefBinding.cityEditText.text.toString().trim()
             if (city.isNotEmpty()) {
-                getWeather(city)
+
+                getWeather(city) { location ->
+
+                    prefBinding.tvCoordinates.text = "Your location: ${location}"
+                    Log.d("Weather", "Received location: $location")
+                }
             } else {
                 Toast.makeText(this, "Input cannot be empty", Toast.LENGTH_SHORT).show()
             }
@@ -62,7 +83,10 @@ class PreferencesActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please search a location first!", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             } else {
-                database.collection("users").document(currentUser!!.uid).set(checkOptionsSelected(city.toString()))
+                val location = prefBinding.cityEditText.text.toString().trim()
+                getWeather(location) { loc ->
+                    database.collection("users").document(currentUser!!.uid).set(checkOptionsSelected(loc))
+                }
                 val homeIntent = Intent(this, HomeActivity::class.java)
                 startActivity(homeIntent)
                 finish()
@@ -90,16 +114,17 @@ class PreferencesActivity : AppCompatActivity() {
         return weatherOptions
     }
 
-    private fun getWeather(city: String) {
+    private fun getWeather(city: String, onLocationReceived: (String) -> Unit) {
         val API_KEY = getString(R.string.weather_api_key)
         val BASE_URL = getString(R.string.base_url)
         WeatherRepository.fetchWeather(BASE_URL, API_KEY, this, city, 5) { weatherResponse ->
             weatherResponse?.let {
-                prefBinding.tvCoordinates.text = "Your location: ${it.location.name}, ${it.location.region}, ${it.location.country}"
+                val location = "${it.location.name}, ${it.location.region}, ${it.location.country}"
+                Toast.makeText(this, location, Toast.LENGTH_LONG).show()
                 Log.d("Weather", "Location: ${it.location.name}, Temp: ${it.current.temp_c}°C")
+                onLocationReceived(location)
             } ?: Log.e("Weather", "Failed to fetch data")
-
         }
-        return
     }
+
 }
