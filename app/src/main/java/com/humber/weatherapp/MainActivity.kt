@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.credentials.Credential
 import androidx.credentials.CredentialManager
@@ -16,6 +17,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.humber.weatherapp.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -74,26 +76,56 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        val currentUser = auth.currentUser
-        if (currentUser != null){
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
-        }
-    }
+//    override fun onStart() {
+//        val currentUser = auth.currentUser
+//        if (currentUser != null){
+//            super.onStart()
+//            val intent = Intent(this, HomeActivity::class.java)
+//            startActivity(intent)
+//        }
+//    }
+
+//    override fun onStart() {
+//        val currentUser = auth.currentUser
+//        if (currentUser != null) {
+//            super.onStart()
+//            val database = FirebaseFirestore.getInstance()
+//            val userRef = database.collection("users").document("${currentUser?.uid}")
+//            userRef.get()
+//                .addOnSuccessListener { document ->
+//                    if (document.exists()) {
+//                        val userData = document.data
+//                        val savedLocation = userData?.get("location")
+//                        if (savedLocation == null) {
+//                            val prefIntent = Intent(this, PreferencesActivity::class.java)
+//                            startActivity(prefIntent)
+//                            finish()
+//                        } else {
+//                            val homeIntent = Intent(this, HomeActivity::class.java)
+//                            startActivity(homeIntent)
+//                            finish()
+//                        }
+//                    }
+//                }
+//                .addOnFailureListener { error ->
+//                    Toast.makeText(
+//                        this,
+//                        "Error retrieving document: ${error.message}",
+//                        Toast.LENGTH_LONG
+//                    ).show()
+//                }
+//        }
+//    }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
+                    // Sign in success
                     Log.d(TAG, "signInWithCredential:success")
-                    // val user = auth.currentUser
-                    val intent = Intent(this, HomeActivity::class.java)
-                    startActivity(intent)
-                    finish()
+                    initializeUser()
+                    redirectUser()
                 } else {
                     // If sign in fails, display a message to the user
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
@@ -101,4 +133,62 @@ class MainActivity : ComponentActivity() {
             }
     }
 
+    private fun initializeUser(){
+        val currentUser = auth.currentUser
+        val database = FirebaseFirestore.getInstance()
+        val userRef = database.collection("users").document("${currentUser?.uid}")
+        userRef.get().addOnSuccessListener { document ->
+            if (!document.exists()) {
+                val userData = hashMapOf(
+                    "email" to currentUser?.email,
+                    "location" to null,
+                    "userid" to currentUser?.uid,
+                    "username" to currentUser?.displayName
+                )
+                userRef.set(userData)
+                    .addOnSuccessListener {
+                        Log.i("success", "User initialised successfully")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("initialization error", e.toString())
+                    }
+            }
+        }
+            .addOnFailureListener{ e ->
+                Log.e("document error", e.toString())
+            }
+    }
+
+    private fun redirectUser() {
+        val auth = Firebase.auth
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            super.onStart()
+            val database = FirebaseFirestore.getInstance()
+            val userRef = database.collection("users").document(currentUser.uid)
+            userRef.get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val userData = document.data
+                        val savedLocation = userData?.get("location")
+                        if (savedLocation == null) {
+                            val prefIntent = Intent(this, PreferencesActivity::class.java)
+                            startActivity(prefIntent)
+                            finish()
+                        } else {
+                            val homeIntent = Intent(this, HomeActivity::class.java)
+                            startActivity(homeIntent)
+                            finish()
+                        }
+                    }
+                }
+                .addOnFailureListener { error ->
+                    Toast.makeText(
+                        this,
+                        "Error retrieving document: ${error.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+        }
+    }
 }

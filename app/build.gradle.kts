@@ -71,4 +71,5 @@ dependencies {
     implementation(libs.material.v1130alpha11)
     implementation(libs.google.firebase.auth)
     implementation ("com.android.volley:volley:1.2.1")
+    implementation ("com.google.code.gson:gson:2.10.1")
 }
