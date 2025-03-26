@@ -56,6 +56,61 @@ class PreferencesActivity : AppCompatActivity() {
                                 prefBinding.cityEditText.setText(locationField.toString())
                             }
                         }
+
+                        val checkboxes = userData?.get("preferences")
+                        Log.d("PreferencesDebug", "Preferences data: $checkboxes (${checkboxes?.javaClass?.name})")
+
+                        when (checkboxes) {
+                            is Map<*, *> -> {
+                                val preferencesMap = checkboxes as Map<*, *>
+
+                                // Set checkbox states from the map
+                                preferencesMap["feels_like"]?.let {
+                                    prefBinding.cboxFeelsLike.isChecked = it as Boolean
+                                }
+                                preferencesMap["wind_speed"]?.let {
+                                    prefBinding.cboxWindSpeed.isChecked = it as Boolean
+                                }
+                                preferencesMap["aqi"]?.let {
+                                    prefBinding.cboxAQI.isChecked = it as Boolean
+                                }
+                                preferencesMap["pressure"]?.let {
+                                    prefBinding.cboxPressure.isChecked = it as Boolean
+                                }
+                                preferencesMap["precipitation"]?.let {
+                                    prefBinding.cboxPrecip.isChecked = it as Boolean
+                                }
+                                preferencesMap["gust"]?.let {
+                                    prefBinding.cboxGust.isChecked = it as Boolean
+                                }
+                                preferencesMap["uv"]?.let {
+                                    prefBinding.cboxUV.isChecked = it as Boolean
+                                }
+                                preferencesMap["humidity"]?.let {
+                                    prefBinding.cboxHumid.isChecked = it as Boolean
+                                }
+                                preferencesMap["wind_direction"]?.let {
+                                    prefBinding.cboxWindDir.isChecked = it as Boolean
+                                }
+                                preferencesMap["sunrise"]?.let {
+                                    prefBinding.cboxSunrise.isChecked = it as Boolean
+                                }
+                                preferencesMap["sunset"]?.let {
+                                    prefBinding.cboxSunset.isChecked = it as Boolean
+                                }
+                                preferencesMap["visibility"]?.let {
+                                    prefBinding.cboxVis.isChecked = it as Boolean
+                                }
+                                preferencesMap["dew_point"]?.let {
+                                    prefBinding.cboxDewPoint.isChecked = it as Boolean
+                                }
+                            }
+
+                            else -> {
+                                Log.d("PreferencesDebug", "Preferences in unexpected format")
+                            }
+                        }
+
                     }
                 }
                 .addOnFailureListener { error ->
