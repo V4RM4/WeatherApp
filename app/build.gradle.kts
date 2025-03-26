@@ -72,4 +72,7 @@ dependencies {
     implementation(libs.google.firebase.auth)
     implementation ("com.android.volley:volley:1.2.1")
     implementation ("com.google.code.gson:gson:2.10.1")
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.12.0"))
+    implementation ("com.google.android.gms:play-services-base")
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
 }

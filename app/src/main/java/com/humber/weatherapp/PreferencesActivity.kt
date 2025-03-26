@@ -97,19 +97,21 @@ class PreferencesActivity : AppCompatActivity() {
     private fun checkOptionsSelected(city: String): HashMap<String, Any> {
         val weatherOptions = hashMapOf(
             "location" to mutableListOf(city),
-            "feels_like" to prefBinding.cboxFeelsLike.isChecked,
-            "wind_speed" to prefBinding.cboxWindSpeed.isChecked,
-            "aqi" to prefBinding.cboxAQI.isChecked,
-            "pressure" to prefBinding.cboxAQI.isChecked,
-            "precipitation" to prefBinding.cboxPrecip.isChecked,
-            "gust" to prefBinding.cboxGust.isChecked,
-            "uv" to prefBinding.cboxUV.isChecked,
-            "humidity" to prefBinding.cboxHumid.isChecked,
-            "wind_direction" to prefBinding.cboxWindDir.isChecked,
-            "sunrise" to prefBinding.cboxSunrise.isChecked,
-            "sunset" to prefBinding.cboxSunset.isChecked,
-            "visibility" to prefBinding.cboxVis.isChecked,
-            "dew_point" to prefBinding.cboxDewPoint.isChecked
+            "preferences" to hashMapOf(
+                "feels_like" to prefBinding.cboxFeelsLike.isChecked,
+                "wind_speed" to prefBinding.cboxWindSpeed.isChecked,
+                "aqi" to prefBinding.cboxAQI.isChecked,
+                "pressure" to prefBinding.cboxPressure.isChecked,
+                "precipitation" to prefBinding.cboxPrecip.isChecked,
+                "gust" to prefBinding.cboxGust.isChecked,
+                "uv" to prefBinding.cboxUV.isChecked,
+                "humidity" to prefBinding.cboxHumid.isChecked,
+                "wind_direction" to prefBinding.cboxWindDir.isChecked,
+                "sunrise" to prefBinding.cboxSunrise.isChecked,
+                "sunset" to prefBinding.cboxSunset.isChecked,
+                "visibility" to prefBinding.cboxVis.isChecked,
+                "dew_point" to prefBinding.cboxDewPoint.isChecked
+            )
         )
         return weatherOptions
     }
