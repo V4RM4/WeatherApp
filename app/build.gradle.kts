@@ -77,5 +77,4 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.10.1")
     implementation ("com.google.android.gms:play-services-base")
     implementation ("com.google.firebase:firebase-bom:33.11.0")
-    implementation ("androidx.core:core-ktx:1.15.0")
 }
