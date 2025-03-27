@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -23,11 +24,44 @@ class LocationSearchActivity : ComponentActivity() {
     private lateinit var searchButton: Button
     private lateinit var locationsContainer: LinearLayout
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var bottomNav: BottomNavigationView
     private val savedLocations = mutableMapOf<String, String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_location_search)
+
+        bottomNav = findViewById(R.id.bottom_navigation)
+
+        // Set the initial selected item
+        bottomNav.selectedItemId = R.id.nav_locations
+
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_profile -> {
+                    if (this::class.java != HomeActivity::class.java) {
+                        startActivity(Intent(this, HomeActivity::class.java))
+                    }
+                    bottomNav.menu.setGroupCheckable(0, false, true)
+                    true
+                }
+                R.id.nav_locations -> {
+                    if (this::class.java != LocationSearchActivity::class.java) {
+                        startActivity(Intent(this, LocationSearchActivity::class.java))
+                    }
+                    bottomNav.menu.setGroupCheckable(0, false, true)
+                    true
+                }
+                R.id.nav_home -> {
+                    if (this::class.java != WeatherActivity::class.java) {
+                        startActivity(Intent(this, WeatherActivity::class.java))
+                    }
+                    bottomNav.menu.setGroupCheckable(0, false, true)
+                    true
+                }
+                else -> false
+            }
+        }
 
         // Initialize SharedPreferences
         sharedPreferences = getSharedPreferences("WeatherLocations", Context.MODE_PRIVATE)

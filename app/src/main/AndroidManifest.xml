@@ -17,9 +17,11 @@
         tools:targetApi="31">
         <activity
             android:name=".WeatherDetailActivity"
+            android:launchMode="singleTask"
             android:exported="false" />
         <activity
             android:name=".LocationSearchActivity"
+            android:launchMode="singleTask"
             android:exported="false" />
         <activity
             android:name=".LauncherActivity"
@@ -34,13 +36,12 @@
             android:name=".PreferencesActivity"
             android:exported="false" />
         <activity
-            android:name=".CrudActivity"
-            android:exported="false" />
-        <activity
             android:name=".WeatherActivity"
+            android:launchMode="singleTask"
             android:exported="false" />
         <activity
             android:name=".HomeActivity"
+            android:launchMode="singleTask"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

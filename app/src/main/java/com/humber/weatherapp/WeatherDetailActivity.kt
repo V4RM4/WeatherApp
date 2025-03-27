@@ -1,10 +1,12 @@
 package com.humber.weatherapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.cardview.widget.CardView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class WeatherDetailActivity : ComponentActivity() {
 
@@ -29,6 +31,7 @@ class WeatherDetailActivity : ComponentActivity() {
     private lateinit var dewPointCard: CardView
     private lateinit var gustCard: CardView
     private lateinit var moonPhaseCard: CardView
+    private lateinit var bottomNav: BottomNavigationView
 
     private lateinit var apiKey: String
     private lateinit var baseUrl: String
@@ -36,6 +39,38 @@ class WeatherDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weather)  // Reusing the same layout as WeatherActivity
+
+        bottomNav = findViewById(R.id.bottom_navigation)
+
+        // Set the initial selected item
+        bottomNav.selectedItemId = R.id.nav_locations
+
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_profile -> {
+                    if (this::class.java != HomeActivity::class.java) {
+                        startActivity(Intent(this, HomeActivity::class.java))
+                    }
+                    bottomNav.menu.setGroupCheckable(0, false, true)
+                    true
+                }
+                R.id.nav_locations -> {
+                    if (this::class.java != LocationSearchActivity::class.java) {
+                        startActivity(Intent(this, LocationSearchActivity::class.java))
+                    }
+                    bottomNav.menu.setGroupCheckable(0, false, true)
+                    true
+                }
+                R.id.nav_home -> {
+                    if (this::class.java != WeatherActivity::class.java) {
+                        startActivity(Intent(this, WeatherActivity::class.java))
+                    }
+                    bottomNav.menu.setGroupCheckable(0, false, true)
+                    true
+                }
+                else -> false
+            }
+        }
 
         // Initialize API values
         apiKey = getString(R.string.weather_api_key)

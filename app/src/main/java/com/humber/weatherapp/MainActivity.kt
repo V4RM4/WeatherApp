@@ -217,7 +217,7 @@ class MainActivity : ComponentActivity() {
                     val intent = if (savedLocation == null) {
                         Intent(this, PreferencesActivity::class.java)
                     } else {
-                        Intent(this, HomeActivity::class.java)
+                        Intent(this, WeatherActivity::class.java)
                     }
                     startActivity(intent)
                     finish()

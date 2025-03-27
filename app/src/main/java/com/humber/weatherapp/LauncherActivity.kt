@@ -79,7 +79,7 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     private fun navigateToHome() {
-        startActivity(Intent(this, HomeActivity::class.java))
+        startActivity(Intent(this, WeatherActivity::class.java))
         finish()
     }
 

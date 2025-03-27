@@ -161,7 +161,7 @@ class PreferencesActivity : AppCompatActivity() {
                                 userDoc.update("user_info.fcmDeviceToken", token.toString())
                                     .addOnSuccessListener {
                                         // navigating to the next screen after both operations complete
-                                        val homeIntent = Intent(this, HomeActivity::class.java)
+                                        val homeIntent = Intent(this, WeatherActivity::class.java)
                                         startActivity(homeIntent)
                                         finish()
                                     }
