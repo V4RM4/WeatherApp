@@ -52,6 +52,11 @@ class HomeActivity : AppCompatActivity() {
             val prefIntent = Intent(this, PreferencesActivity::class.java)
             startActivity(prefIntent)
         }
+
+        homeBinding.locationBtn.setOnClickListener {
+            val locationIntent = Intent(this, LocationSearchActivity::class.java)
+            startActivity(locationIntent)
+        }
     }
 
     private fun signOut() {
