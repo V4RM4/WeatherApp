@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 import com.humber.weatherapp.databinding.ActivityPreferencesBinding
 
 class PreferencesActivity : AppCompatActivity() {
@@ -40,6 +41,7 @@ class PreferencesActivity : AppCompatActivity() {
                                 // Handle null case
                                 prefBinding.cityEditText.setText("")
                             }
+
                             is List<*> -> {
                                 // Handle array/list case
                                 val locationList = locationField as List<*>
@@ -51,6 +53,7 @@ class PreferencesActivity : AppCompatActivity() {
                                     prefBinding.cityEditText.setText("")
                                 }
                             }
+
                             else -> {
                                 // Handle single string case (just in case)
                                 prefBinding.cityEditText.setText(locationField.toString())
@@ -58,7 +61,10 @@ class PreferencesActivity : AppCompatActivity() {
                         }
 
                         val checkboxes = userData?.get("preferences")
-                        Log.d("PreferencesDebug", "Preferences data: $checkboxes (${checkboxes?.javaClass?.name})")
+                        Log.d(
+                            "PreferencesDebug",
+                            "Preferences data: $checkboxes (${checkboxes?.javaClass?.name})"
+                        )
 
                         when (checkboxes) {
                             is Map<*, *> -> {
@@ -114,7 +120,11 @@ class PreferencesActivity : AppCompatActivity() {
                     }
                 }
                 .addOnFailureListener { error ->
-                    Toast.makeText(this, "Error retrieving document: ${error.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        "Error retrieving document: ${error.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
         }
 
@@ -139,13 +149,41 @@ class PreferencesActivity : AppCompatActivity() {
                 return@setOnClickListener
             } else {
                 val location = prefBinding.cityEditText.text.toString().trim()
+
+                // getting the weather data
                 getWeather(location) { loc ->
-                    database.collection("users").document(currentUser!!.uid)
-                        .set(checkOptionsSelected(loc))
+                    // this is the token for notification
+                    getFCMToken { token ->
+                        val userDoc = database.collection("users").document(currentUser!!.uid)
+
+                        userDoc.set(checkOptionsSelected(loc))
+                            .addOnSuccessListener {
+                                userDoc.update("user_info.fcmDeviceToken", token.toString())
+                                    .addOnSuccessListener {
+                                        // navigating to the next screen after both operations complete
+                                        val homeIntent = Intent(this, HomeActivity::class.java)
+                                        startActivity(homeIntent)
+                                        finish()
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.e("Failed to update FCM token", e.message.toString())
+                                    }
+                            }
+                            .addOnFailureListener { e ->
+                                Log.e("Failed to save user data", e.message.toString())
+                            }
+                    }
                 }
-                val homeIntent = Intent(this, HomeActivity::class.java)
-                startActivity(homeIntent)
-                finish()
+            }
+        }
+
+    }
+
+    private fun getFCMToken(callback: (String) -> Unit) {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val token = task.result
+                callback(token)
             }
         }
     }
@@ -158,7 +196,8 @@ class PreferencesActivity : AppCompatActivity() {
                 "user_id" to currentUser?.uid,
                 "display_name" to currentUser?.displayName,
                 "email" to currentUser?.email,
-                "photoUrl" to currentUser?.photoUrl
+                "photoUrl" to currentUser?.photoUrl,
+                "fcmDeviceToken" to ""
             ),
             "location" to mutableListOf(city),
             "preferences" to hashMapOf(
