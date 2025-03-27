@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class WeatherActivity : ComponentActivity() {
 
+    private lateinit var localDateTime: TextView
     private lateinit var locationName: TextView
     private lateinit var tempCard: CardView
     private lateinit var feelsLikeCard: CardView
@@ -49,6 +50,7 @@ class WeatherActivity : ComponentActivity() {
         baseUrl = getString(R.string.base_url)
 
         // Initialize UI components
+        localDateTime = findViewById(R.id.localDateTime)
         locationName = findViewById(R.id.locationName)
         tempCard = findViewById(R.id.tempCard)
         feelsLikeCard = findViewById(R.id.feelsLikeCard)
@@ -112,6 +114,7 @@ class WeatherActivity : ComponentActivity() {
 
     private fun updateUI(preferences: Map<String, Boolean>, weatherData: WeatherResponse, city: String) {
         runOnUiThread {
+            localDateTime.text = weatherData.location.localtime
             locationName.text = weatherData.location.name
 
             // Temperature - with toggle functionality
