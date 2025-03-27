@@ -61,6 +61,9 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.firebase.database)
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.inappmessaging.display)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.messaging)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -71,4 +74,7 @@ dependencies {
     implementation(libs.material.v1130alpha11)
     implementation(libs.google.firebase.auth)
     implementation ("com.android.volley:volley:1.2.1")
+    implementation ("com.google.code.gson:gson:2.10.1")
+    implementation ("com.google.android.gms:play-services-base")
+    implementation ("com.google.firebase:firebase-bom:33.11.0")
 }

@@ -20,7 +20,7 @@ class CrudActivity : AppCompatActivity() {
         // Get the Firebase Authentication instance
         val auth = FirebaseAuth.getInstance()
 
-// Get the Firebase Realtime Database instance
+        // Get the Firebase Realtime Database instance
         val database = FirebaseFirestore.getInstance()
 
         val currentUser = auth.currentUser

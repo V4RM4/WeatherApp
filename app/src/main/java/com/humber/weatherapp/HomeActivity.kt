@@ -1,6 +1,5 @@
 package com.humber.weatherapp
 
-import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -23,7 +22,6 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var credentialManager: CredentialManager
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeBinding = ActivityHomeBinding.inflate(layoutInflater)
@@ -49,6 +47,11 @@ class HomeActivity : AppCompatActivity() {
             val crudIntent = Intent(this, CrudActivity::class.java)
             startActivity(crudIntent)
         }
+
+        homeBinding.prefBtn.setOnClickListener{
+            val prefIntent = Intent(this, PreferencesActivity::class.java)
+            startActivity(prefIntent)
+        }
     }
 
     private fun signOut() {
@@ -68,5 +71,11 @@ class HomeActivity : AppCompatActivity() {
                 Log.e(TAG, "Couldn't clear user credentials: ${e.localizedMessage}")
             }
         }
+        val dir = filesDir
+        dir.deleteRecursively()
+
+        //Clear cache
+        cacheDir.deleteRecursively()
+
     }
 }
