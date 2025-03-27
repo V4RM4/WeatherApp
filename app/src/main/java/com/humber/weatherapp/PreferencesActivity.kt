@@ -134,13 +134,14 @@ class PreferencesActivity : AppCompatActivity() {
 
         prefBinding.btnContinue.setOnClickListener {
             val city = prefBinding.tvCoordinates.text
-            if (city.isEmpty()){
+            if (city.isEmpty()) {
                 Toast.makeText(this, "Please search a location first!", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             } else {
                 val location = prefBinding.cityEditText.text.toString().trim()
                 getWeather(location) { loc ->
-                    database.collection("users").document(currentUser!!.uid).set(checkOptionsSelected(loc))
+                    database.collection("users").document(currentUser!!.uid)
+                        .set(checkOptionsSelected(loc))
                 }
                 val homeIntent = Intent(this, HomeActivity::class.java)
                 startActivity(homeIntent)
@@ -150,7 +151,15 @@ class PreferencesActivity : AppCompatActivity() {
     }
 
     private fun checkOptionsSelected(city: String): HashMap<String, Any> {
+        val auth = FirebaseAuth.getInstance()
+        val currentUser = auth.currentUser
         val weatherOptions = hashMapOf(
+            "user_info" to hashMapOf(
+                "user_id" to currentUser?.uid,
+                "display_name" to currentUser?.displayName,
+                "email" to currentUser?.email,
+                "photoUrl" to currentUser?.photoUrl
+            ),
             "location" to mutableListOf(city),
             "preferences" to hashMapOf(
                 "feels_like" to prefBinding.cboxFeelsLike.isChecked,

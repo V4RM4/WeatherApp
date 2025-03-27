@@ -2,14 +2,20 @@ package com.humber.weatherapp
 
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.credentials.Credential
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialException
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
@@ -22,26 +28,87 @@ import com.humber.weatherapp.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
 
-    private lateinit var mainBinding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var credentialManager: CredentialManager
+    private val db = FirebaseFirestore.getInstance()
+
+    // Define the notification permission string
+    private val POST_NOTIFICATIONS = "android.permission.POST_NOTIFICATIONS"
+
+    // Request permission launcher
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            Log.d(TAG, "Notification permission granted")
+            // You can store this preference in SharedPreferences if needed
+        } else {
+            Log.d(TAG, "Notification permission denied")
+            Toast.makeText(
+                this,
+                "You won't receive weather notifications without permission",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainBinding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(mainBinding.root)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         auth = Firebase.auth
         credentialManager = CredentialManager.create(this)
 
+        setupGoogleSignIn()
+
+        requestNotificationPermission()
+        // Check if user is already signed in
+        auth.currentUser?.let {
+            redirectUser()
+        }
+    }
+
+    private fun requestNotificationPermission() {
+        // For Android 13 and higher, we need to request the POST_NOTIFICATIONS permission
+        if (Build.VERSION.SDK_INT >= 33) { // API 33 is Android 13 (Tiramisu)
+            when {
+                ContextCompat.checkSelfPermission(
+                    this,
+                    POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED -> {
+                    // Permission already granted
+                    Log.d(TAG, "Notification permission already granted")
+                }
+                shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) -> {
+                    // Explain why the app needs this permission
+                    Toast.makeText(
+                        this,
+                        "We need permission to send you weather updates and alerts",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    // Then request the permission
+                    requestPermissionLauncher.launch(POST_NOTIFICATIONS)
+                }
+                else -> {
+                    // Request the permission directly
+                    requestPermissionLauncher.launch(POST_NOTIFICATIONS)
+                }
+            }
+        }
+    }
+
+
+    private fun setupGoogleSignIn() {
         // Instantiate a Google sign-in request
         val googleIdOption = GetGoogleIdOption.Builder()
-            // This is from the json which we later added into strings
             .setServerClientId(getString(R.string.default_web_client_id))
-            // Don't only show accounts previously used to sign in.
             .setFilterByAuthorizedAccounts(false)
             .build()
 
@@ -50,145 +117,121 @@ class MainActivity : ComponentActivity() {
             .addCredentialOption(googleIdOption)
             .build()
 
+        binding.googleSigninBtn.setOnClickListener {
 
-        mainBinding.googleSigninBtn.setOnClickListener {
-            // getCredential only works within a coroutine
             CoroutineScope(Dispatchers.Main).launch {
-                val result = credentialManager.getCredential(
-                    request = request,
-                    context = this@MainActivity
-                )
-                handleSignIn(result.credential)
+                try {
+                    val result = credentialManager.getCredential(
+                        request = request,
+                        context = this@MainActivity
+                    )
+                    handleSignIn(result.credential)
+                } catch (e: GetCredentialException) {
+                    Log.e(TAG, "Error getting credential: ${e.message}")
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Sign-in failed: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }
 
     private fun handleSignIn(credential: Credential) {
-        // Check if credential is of type Google ID
         if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-            // Create Google ID Token
             val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
-
-            // Sign in to Firebase with using the token
             firebaseAuthWithGoogle(googleIdTokenCredential.idToken)
         } else {
             Log.w(TAG, "Credential is not of type Google ID!")
+            Toast.makeText(
+                this,
+                "Unsupported credential type",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
-
-//    override fun onStart() {
-//        val currentUser = auth.currentUser
-//        if (currentUser != null){
-//            super.onStart()
-//            val intent = Intent(this, HomeActivity::class.java)
-//            startActivity(intent)
-//        }
-//    }
-
-//    override fun onStart() {
-//        val currentUser = auth.currentUser
-//        if (currentUser != null) {
-//            super.onStart()
-//            val database = FirebaseFirestore.getInstance()
-//            val userRef = database.collection("users").document("${currentUser?.uid}")
-//            userRef.get()
-//                .addOnSuccessListener { document ->
-//                    if (document.exists()) {
-//                        val userData = document.data
-//                        val savedLocation = userData?.get("location")
-//                        if (savedLocation == null) {
-//                            val prefIntent = Intent(this, PreferencesActivity::class.java)
-//                            startActivity(prefIntent)
-//                            finish()
-//                        } else {
-//                            val homeIntent = Intent(this, HomeActivity::class.java)
-//                            startActivity(homeIntent)
-//                            finish()
-//                        }
-//                    }
-//                }
-//                .addOnFailureListener { error ->
-//                    Toast.makeText(
-//                        this,
-//                        "Error retrieving document: ${error.message}",
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                }
-//        }
-//    }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success
                     Log.d(TAG, "signInWithCredential:success")
                     initializeUser()
-                    redirectUser()
                 } else {
-                    // If sign in fails, display a message to the user
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    Toast.makeText(
+                        this,
+                        "Authentication failed: ${task.exception?.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
     }
 
-    private fun initializeUser(){
-        val currentUser = auth.currentUser
-        val database = FirebaseFirestore.getInstance()
-        val userRef = database.collection("users").document("${currentUser?.uid}")
+    private fun initializeUser() {
+        val currentUser = auth.currentUser ?: return
+        val userRef = db.collection("users").document(currentUser.uid)
+
         userRef.get().addOnSuccessListener { document ->
             if (!document.exists()) {
                 val userData = hashMapOf(
-                    "email" to currentUser?.email,
+                    "email" to currentUser.email,
                     "location" to null,
-                    "userid" to currentUser?.uid,
-                    "username" to currentUser?.displayName
+                    "userid" to currentUser.uid,
+                    "username" to currentUser.displayName
                 )
+
                 userRef.set(userData)
                     .addOnSuccessListener {
-                        Log.i("success", "User initialised successfully")
+                        Log.i(TAG, "User initialized successfully")
+                        redirectUser()
                     }
                     .addOnFailureListener { e ->
-                        Log.e("initialization error", e.toString())
+                        Log.e(TAG, "User initialization error: ${e.message}")
+                        Toast.makeText(
+                            this,
+                            "Failed to initialize user data",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
+            } else {
+                redirectUser()
             }
+        }.addOnFailureListener { e ->
+            Log.e(TAG, "Document error: ${e.message}")
+            Toast.makeText(
+                this,
+                "Failed to check user data",
+                Toast.LENGTH_SHORT
+            ).show()
         }
-            .addOnFailureListener{ e ->
-                Log.e("document error", e.toString())
-            }
     }
 
     private fun redirectUser() {
-        val auth = Firebase.auth
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            super.onStart()
-            val database = FirebaseFirestore.getInstance()
-            val userRef = database.collection("users").document(currentUser.uid)
-            userRef.get()
-                .addOnSuccessListener { document ->
-                    if (document.exists()) {
-                        val userData = document.data
-                        val savedLocation = userData?.get("location")
-                        if (savedLocation == null) {
-                            val prefIntent = Intent(this, PreferencesActivity::class.java)
-                            startActivity(prefIntent)
-                            finish()
-                        } else {
-                            val homeIntent = Intent(this, HomeActivity::class.java)
-                            startActivity(homeIntent)
-                            finish()
-                        }
+        val currentUser = auth.currentUser ?: return
+
+        db.collection("users").document(currentUser.uid).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val savedLocation = document.data?.get("location")
+                    val intent = if (savedLocation == null) {
+                        Intent(this, PreferencesActivity::class.java)
+                    } else {
+                        Intent(this, HomeActivity::class.java)
                     }
+                    startActivity(intent)
+                    finish()
                 }
-                .addOnFailureListener { error ->
-                    Toast.makeText(
-                        this,
-                        "Error retrieving document: ${error.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-        }
+            }
+            .addOnFailureListener { error ->
+                Log.e(TAG, "Error retrieving user data: ${error.message}")
+                Toast.makeText(
+                    this,
+                    "Error retrieving user data: ${error.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
     }
 }
