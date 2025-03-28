@@ -110,6 +110,18 @@ class PreferencesActivity : AppCompatActivity() {
                                 preferencesMap["dew_point"]?.let {
                                     prefBinding.cboxDewPoint.isChecked = it as Boolean
                                 }
+                                preferencesMap["wind_chill"]?.let {
+                                    prefBinding.cboxChill.isChecked = it as Boolean
+                                }
+                                preferencesMap["heat_index"]?.let {
+                                    prefBinding.cboxHI.isChecked = it as Boolean
+                                }
+                                preferencesMap["cloud_cover"]?.let {
+                                    prefBinding.cboxCloud.isChecked = it as Boolean
+                                }
+                                preferencesMap["moon_phase"]?.let {
+                                    prefBinding.cboxMoon.isChecked = it as Boolean
+                                }
                             }
 
                             else -> {
@@ -213,7 +225,11 @@ class PreferencesActivity : AppCompatActivity() {
                 "sunrise" to prefBinding.cboxSunrise.isChecked,
                 "sunset" to prefBinding.cboxSunset.isChecked,
                 "visibility" to prefBinding.cboxVis.isChecked,
-                "dew_point" to prefBinding.cboxDewPoint.isChecked
+                "dew_point" to prefBinding.cboxDewPoint.isChecked,
+                "wind_chill" to prefBinding.cboxChill.isChecked,
+                "heat_index" to prefBinding.cboxHI.isChecked,
+                "cloud_cover" to prefBinding.cboxCloud.isChecked,
+                "moon_phase" to prefBinding.cboxMoon.isChecked
             )
         )
         return weatherOptions

@@ -303,99 +303,137 @@ class WeatherActivity : ComponentActivity() {
             }
 
             // Wind Direction
-            val windDir = weatherData.current.wind_dir
-            val windDegree = weatherData.current.wind_degree
-            windDirCard.findViewById<TextView>(R.id.windDirText).text = "🧭 Wind Direction: $windDir ($windDegree°)"
+            if (preferences["wind_direction"] == true){
+                val windDir = weatherData.current.wind_dir
+                val windDegree = weatherData.current.wind_degree
+                windDirCard.findViewById<TextView>(R.id.windDirText).text = "🧭 Wind Direction: $windDir ($windDegree°)"
+            } else {
+                windDirCard.visibility = CardView.GONE
+            }
 
             // Precipitation - with toggle functionality
-            val precipTextView = precipCard.findViewById<TextView>(R.id.precipText)
-            var isPrecipMm = true
-            val precipMm = weatherData.current.precip_mm
-            val precipIn = weatherData.current.precip_in
-            precipTextView.text = "🌧 Precipitation: $precipMm mm"
+            if (preferences["precipitation"] == true){
+                val precipTextView = precipCard.findViewById<TextView>(R.id.precipText)
+                var isPrecipMm = true
+                val precipMm = weatherData.current.precip_mm
+                val precipIn = weatherData.current.precip_in
+                precipTextView.text = "🌧 Precipitation: $precipMm mm"
 
-            precipCard.setOnClickListener {
-                if (isPrecipMm) {
-                    precipTextView.text = "🌧 Precipitation: $precipIn in"
-                } else {
-                    precipTextView.text = "🌧 Precipitation: $precipMm mm"
+                precipCard.setOnClickListener {
+                    if (isPrecipMm) {
+                        precipTextView.text = "🌧 Precipitation: $precipIn in"
+                    } else {
+                        precipTextView.text = "🌧 Precipitation: $precipMm mm"
+                    }
+                    isPrecipMm = !isPrecipMm
                 }
-                isPrecipMm = !isPrecipMm
+            } else {
+                precipCard.visibility = CardView.GONE
             }
+
 
             // Cloud Cover
-            val cloud = weatherData.current.cloud
-            cloudCard.findViewById<TextView>(R.id.cloudText).text = "☁️ Cloud Cover: $cloud%"
+            if (preferences["cloud_cover"] == true){
+                val cloud = weatherData.current.cloud
+                cloudCard.findViewById<TextView>(R.id.cloudText).text = "☁️ Cloud Cover: $cloud%"
+            } else {
+                cloudCard.visibility = CardView.GONE
+            }
 
             // Wind Chill - with toggle functionality
-            val windChillTextView = windChillCard.findViewById<TextView>(R.id.windChillText)
-            var isWindChillCelsius = true
-            val windChillC = weatherData.current.windchill_c
-            val windChillF = weatherData.current.windchill_f
-            windChillTextView.text = "❄️ Wind Chill: $windChillC°C"
+            if (preferences["wind_chill"] == true){
+                val windChillTextView = windChillCard.findViewById<TextView>(R.id.windChillText)
+                var isWindChillCelsius = true
+                val windChillC = weatherData.current.windchill_c
+                val windChillF = weatherData.current.windchill_f
+                windChillTextView.text = "❄️ Wind Chill: $windChillC°C"
 
-            windChillCard.setOnClickListener {
-                if (isWindChillCelsius) {
-                    windChillTextView.text = "❄️ Wind Chill: $windChillF°F"
-                } else {
-                    windChillTextView.text = "❄️ Wind Chill: $windChillC°C"
+                windChillCard.setOnClickListener {
+                    if (isWindChillCelsius) {
+                        windChillTextView.text = "❄️ Wind Chill: $windChillF°F"
+                    } else {
+                        windChillTextView.text = "❄️ Wind Chill: $windChillC°C"
+                    }
+                    isWindChillCelsius = !isWindChillCelsius
                 }
-                isWindChillCelsius = !isWindChillCelsius
+            } else {
+                windChillCard.visibility = CardView.GONE
             }
+
 
             // Heat Index - with toggle functionality
-            val heatIndexTextView = heatIndexCard.findViewById<TextView>(R.id.heatIndexText)
-            var isHeatIndexCelsius = true
-            val heatIndexC = weatherData.current.heatindex_c
-            val heatIndexF = weatherData.current.heatindex_f
-            heatIndexTextView.text = "🔥 Heat Index: $heatIndexC°C"
+            if (preferences["heat_index"] == true){
+                val heatIndexTextView = heatIndexCard.findViewById<TextView>(R.id.heatIndexText)
+                var isHeatIndexCelsius = true
+                val heatIndexC = weatherData.current.heatindex_c
+                val heatIndexF = weatherData.current.heatindex_f
+                heatIndexTextView.text = "🔥 Heat Index: $heatIndexC°C"
 
-            heatIndexCard.setOnClickListener {
-                if (isHeatIndexCelsius) {
-                    heatIndexTextView.text = "🔥 Heat Index: $heatIndexF°F"
-                } else {
-                    heatIndexTextView.text = "🔥 Heat Index: $heatIndexC°C"
+                heatIndexCard.setOnClickListener {
+                    if (isHeatIndexCelsius) {
+                        heatIndexTextView.text = "🔥 Heat Index: $heatIndexF°F"
+                    } else {
+                        heatIndexTextView.text = "🔥 Heat Index: $heatIndexC°C"
+                    }
+                    isHeatIndexCelsius = !isHeatIndexCelsius
                 }
-                isHeatIndexCelsius = !isHeatIndexCelsius
+            } else {
+                heatIndexCard.visibility = CardView.GONE
             }
+
 
             // Dew Point - with toggle functionality
-            val dewPointTextView = dewPointCard.findViewById<TextView>(R.id.dewPointText)
-            var isDewPointCelsius = true
-            val dewPointC = weatherData.current.dewpoint_c
-            val dewPointF = weatherData.current.dewpoint_f
-            dewPointTextView.text = "💦 Dew Point: $dewPointC°C"
+            if (preferences["dew_point"] == true){
+                val dewPointTextView = dewPointCard.findViewById<TextView>(R.id.dewPointText)
+                var isDewPointCelsius = true
+                val dewPointC = weatherData.current.dewpoint_c
+                val dewPointF = weatherData.current.dewpoint_f
+                dewPointTextView.text = "💦 Dew Point: $dewPointC°C"
 
-            dewPointCard.setOnClickListener {
-                if (isDewPointCelsius) {
-                    dewPointTextView.text = "💦 Dew Point: $dewPointF°F"
-                } else {
-                    dewPointTextView.text = "💦 Dew Point: $dewPointC°C"
+                dewPointCard.setOnClickListener {
+                    if (isDewPointCelsius) {
+                        dewPointTextView.text = "💦 Dew Point: $dewPointF°F"
+                    } else {
+                        dewPointTextView.text = "💦 Dew Point: $dewPointC°C"
+                    }
+                    isDewPointCelsius = !isDewPointCelsius
                 }
-                isDewPointCelsius = !isDewPointCelsius
+            } else {
+                dewPointCard.visibility = CardView.GONE
             }
+
 
             // Wind Gust - with toggle functionality
-            val gustTextView = gustCard.findViewById<TextView>(R.id.gustText)
-            var isGustKph = true
-            val gustKph = weatherData.current.gust_kph
-            val gustMph = weatherData.current.gust_mph
-            gustTextView.text = "🌬 Wind Gust: $gustKph km/h"
+            if (preferences["gust"] == true){
+                val gustTextView = gustCard.findViewById<TextView>(R.id.gustText)
+                var isGustKph = true
+                val gustKph = weatherData.current.gust_kph
+                val gustMph = weatherData.current.gust_mph
+                gustTextView.text = "🌬 Wind Gust: $gustKph km/h"
 
-            gustCard.setOnClickListener {
-                if (isGustKph) {
-                    gustTextView.text = "🌬 Wind Gust: $gustMph mph"
-                } else {
-                    gustTextView.text = "🌬 Wind Gust: $gustKph km/h"
+                gustCard.setOnClickListener {
+                    if (isGustKph) {
+                        gustTextView.text = "🌬 Wind Gust: $gustMph mph"
+                    } else {
+                        gustTextView.text = "🌬 Wind Gust: $gustKph km/h"
+                    }
+                    isGustKph = !isGustKph
                 }
-                isGustKph = !isGustKph
+            } else {
+                gustCard.visibility = CardView.GONE
             }
 
+
             // Moon Phase
-            val moonPhase = weatherData.forecast.forecastday[0].astro.moon_phase
-            val moonIllumination = weatherData.forecast.forecastday[0].astro.moon_illumination
-            moonPhaseCard.findViewById<TextView>(R.id.moonPhaseText).text =
-                "🌙 Moon Phase: $moonPhase ($moonIllumination% illuminated)"
+            if (preferences["moon_phase"] == true){
+                val moonPhase = weatherData.forecast.forecastday[0].astro.moon_phase
+                val moonIllumination = weatherData.forecast.forecastday[0].astro.moon_illumination
+                moonPhaseCard.findViewById<TextView>(R.id.moonPhaseText).text =
+                    "🌙 Moon Phase: $moonPhase ($moonIllumination% illuminated)"
+            } else {
+                moonPhaseCard.visibility = CardView.GONE
+            }
+
         }
     }
 }

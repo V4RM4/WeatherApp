@@ -214,6 +214,42 @@
                         android:layout_marginTop="12dp"
                         android:layout_marginRight="24dp"
                         android:layout_marginBottom="12dp"/>
+
+                    <CheckBox
+                        android:id="@+id/cboxChill"
+                        android:text="Wind Chill"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginBottom="12dp"/>
+
+                    <CheckBox
+                        android:id="@+id/cboxHI"
+                        android:text="Heat Index"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginBottom="12dp"/>
+
+                    <CheckBox
+                        android:id="@+id/cboxCloud"
+                        android:text="Cloud Cover"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginBottom="12dp"/>
+
+                    <CheckBox
+                        android:id="@+id/cboxMoon"
+                        android:text="Moon Phase"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginBottom="12dp"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
