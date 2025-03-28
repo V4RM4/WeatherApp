@@ -10,6 +10,7 @@ import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import androidx.credentials.exceptions.ClearCredentialException
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -21,11 +22,44 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var homeBinding: ActivityHomeBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var credentialManager: CredentialManager
+    private lateinit var bottomNav: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeBinding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(homeBinding.root)
+
+        bottomNav = findViewById(R.id.bottom_navigation)
+
+        // Set the initial selected item
+        bottomNav.selectedItemId = R.id.nav_profile
+
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_profile -> {
+                    if (this::class.java != HomeActivity::class.java) {
+                        startActivity(Intent(this, HomeActivity::class.java))
+                    }
+                    bottomNav.menu.setGroupCheckable(0, false, true)
+                    true
+                }
+                R.id.nav_locations -> {
+                    if (this::class.java != LocationSearchActivity::class.java) {
+                        startActivity(Intent(this, LocationSearchActivity::class.java))
+                    }
+                    bottomNav.menu.setGroupCheckable(0, false, true)
+                    true
+                }
+                R.id.nav_home -> {
+                    if (this::class.java != WeatherActivity::class.java) {
+                        startActivity(Intent(this, WeatherActivity::class.java))
+                    }
+                    bottomNav.menu.setGroupCheckable(0, false, true)
+                    true
+                }
+                else -> false
+            }
+        }
 
         auth = Firebase.auth
         credentialManager = CredentialManager.create(this)
@@ -41,11 +75,6 @@ class HomeActivity : AppCompatActivity() {
         homeBinding.weatherStuffBtn.setOnClickListener{
             val weatherIntent = Intent(this, WeatherActivity::class.java)
             startActivity(weatherIntent)
-        }
-
-        homeBinding.crudBtn.setOnClickListener{
-            val crudIntent = Intent(this, CrudActivity::class.java)
-            startActivity(crudIntent)
         }
 
         homeBinding.prefBtn.setOnClickListener{

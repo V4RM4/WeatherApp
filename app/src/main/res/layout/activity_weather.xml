@@ -19,6 +19,18 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/localDateTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="16dp"
+                android:gravity="center"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
                 android:id="@+id/locationName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -26,12 +38,11 @@
                 android:textSize="24sp"
                 android:textColor="@android:color/white"
                 android:padding="16dp"
-                android:layout_marginTop="20dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:gravity="center"
                 android:background="@drawable/rounded_background"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/localDateTime"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -300,15 +311,222 @@
                     android:textColor="@android:color/black"/>
             </androidx.cardview.widget.CardView>
 
+            <!-- Wind Direction Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/windDirCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="12dp"
+                app:layout_constraintTop_toBottomOf="@id/sunsetCard"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <TextView
+                    android:id="@+id/windDirText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="🧭 Wind Direction: --"
+                    android:padding="16dp"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/black"/>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Precipitation Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/precipCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="12dp"
+                app:layout_constraintTop_toBottomOf="@id/windDirCard"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <TextView
+                    android:id="@+id/precipText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="🌧 Precipitation: --"
+                    android:padding="16dp"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/black"/>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Cloud Cover Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cloudCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="12dp"
+                app:layout_constraintTop_toBottomOf="@id/precipCard"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <TextView
+                    android:id="@+id/cloudText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="☁️ Cloud Cover: --"
+                    android:padding="16dp"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/black"/>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Wind Chill Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/windChillCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="12dp"
+                app:layout_constraintTop_toBottomOf="@id/cloudCard"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <TextView
+                    android:id="@+id/windChillText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="❄️ Wind Chill: --"
+                    android:padding="16dp"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/black"/>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Heat Index Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/heatIndexCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="12dp"
+                app:layout_constraintTop_toBottomOf="@id/windChillCard"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <TextView
+                    android:id="@+id/heatIndexText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="🔥 Heat Index: --"
+                    android:padding="16dp"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/black"/>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Dew Point Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/dewPointCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="12dp"
+                app:layout_constraintTop_toBottomOf="@id/heatIndexCard"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <TextView
+                    android:id="@+id/dewPointText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="💦 Dew Point: --"
+                    android:padding="16dp"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/black"/>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Gust Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/gustCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="12dp"
+                app:layout_constraintTop_toBottomOf="@id/dewPointCard"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <TextView
+                    android:id="@+id/gustText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="🌬 Wind Gust: --"
+                    android:padding="16dp"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/black"/>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Moon Phase Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/moonPhaseCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="12dp"
+                app:layout_constraintTop_toBottomOf="@id/gustCard"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <TextView
+                    android:id="@+id/moonPhaseText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="🌙 Moon Phase: --"
+                    android:padding="16dp"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/black"/>
+            </androidx.cardview.widget.CardView>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                app:layout_constraintTop_toBottomOf="@id/sunsetCard"
+                app:layout_constraintTop_toBottomOf="@id/moonPhaseCard"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </android.widget.ScrollView>
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="?android:attr/windowBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

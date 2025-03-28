@@ -10,9 +10,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class WeatherActivity : ComponentActivity() {
+class WeatherDetailActivity : ComponentActivity() {
 
-    private lateinit var localDateTime: TextView
+    private lateinit var locationDateTime: TextView
     private lateinit var locationName: TextView
     private lateinit var tempCard: CardView
     private lateinit var feelsLikeCard: CardView
@@ -42,24 +42,24 @@ class WeatherActivity : ComponentActivity() {
 
     override fun onStart() {
         super.onStart()
-        loadUserPreferences()
+        val city = intent.getStringExtra("CITY") ?: ""
+        loadUserPreferences(city)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_weather)
+        setContentView(R.layout.activity_weather)  // Reusing the same layout as WeatherActivity
 
         bottomNav = findViewById(R.id.bottom_navigation)
 
         // Set the initial selected item
-        bottomNav.selectedItemId = R.id.nav_home
+        bottomNav.selectedItemId = R.id.nav_locations
 
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_profile -> {
                     if (this::class.java != HomeActivity::class.java) {
                         startActivity(Intent(this, HomeActivity::class.java))
-                        finish()
                     }
                     bottomNav.menu.setGroupCheckable(0, false, true)
                     true
@@ -67,7 +67,6 @@ class WeatherActivity : ComponentActivity() {
                 R.id.nav_locations -> {
                     if (this::class.java != LocationSearchActivity::class.java) {
                         startActivity(Intent(this, LocationSearchActivity::class.java))
-                        finish()
                     }
                     bottomNav.menu.setGroupCheckable(0, false, true)
                     true
@@ -92,7 +91,7 @@ class WeatherActivity : ComponentActivity() {
         baseUrl = getString(R.string.base_url)
 
         // Initialize UI components
-        localDateTime = findViewById(R.id.localDateTime)
+        locationDateTime = findViewById(R.id.localDateTime)
         locationName = findViewById(R.id.locationName)
         tempCard = findViewById(R.id.tempCard)
         feelsLikeCard = findViewById(R.id.feelsLikeCard)
@@ -114,10 +113,12 @@ class WeatherActivity : ComponentActivity() {
         gustCard = findViewById(R.id.gustCard)
         moonPhaseCard = findViewById(R.id.moonPhaseCard)
 
-        loadUserPreferences()
+        // Get city from intent
+        val city = intent.getStringExtra("CITY") ?: ""
+        loadUserPreferences(city)
     }
 
-    private fun loadUserPreferences() {
+    private fun loadUserPreferences(city: String) {
         val user = auth.currentUser
         if (user == null) {
             Toast.makeText(this, "User not authenticated", Toast.LENGTH_SHORT).show()
@@ -127,13 +128,8 @@ class WeatherActivity : ComponentActivity() {
         db.collection("users").document(user.uid).get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
-                    // Get location as a list and take the first item
-                    val locationList = document.get("location") as? List<String>
-                    val city = locationList?.firstOrNull() ?: "Unknown"
-
                     // Get preferences map
                     val preferences = document.get("preferences") as? Map<String, Boolean> ?: emptyMap()
-
                     fetchWeatherData(city, preferences)
                 } else {
                     Toast.makeText(this, "No preferences found", Toast.LENGTH_SHORT).show()
@@ -156,7 +152,7 @@ class WeatherActivity : ComponentActivity() {
 
     private fun updateUI(preferences: Map<String, Boolean>, weatherData: WeatherResponse, city: String) {
         runOnUiThread {
-            localDateTime.text = weatherData.location.localtime
+            locationDateTime.text = weatherData.location.localtime
             locationName.text = weatherData.location.name
 
             // Temperature - with toggle functionality
@@ -435,7 +431,6 @@ class WeatherActivity : ComponentActivity() {
             } else {
                 moonPhaseCard.visibility = CardView.GONE
             }
-
         }
     }
 }
