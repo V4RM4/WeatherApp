@@ -59,6 +59,7 @@ class WeatherActivity : ComponentActivity() {
                 R.id.nav_profile -> {
                     if (this::class.java != HomeActivity::class.java) {
                         startActivity(Intent(this, HomeActivity::class.java))
+                        finish()
                     }
                     bottomNav.menu.setGroupCheckable(0, false, true)
                     true
@@ -66,6 +67,7 @@ class WeatherActivity : ComponentActivity() {
                 R.id.nav_locations -> {
                     if (this::class.java != LocationSearchActivity::class.java) {
                         startActivity(Intent(this, LocationSearchActivity::class.java))
+                        finish()
                     }
                     bottomNav.menu.setGroupCheckable(0, false, true)
                     true
