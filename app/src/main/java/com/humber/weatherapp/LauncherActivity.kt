@@ -56,7 +56,7 @@ class LauncherActivity : AppCompatActivity() {
                         } else {
                             // User document doesn't exist - unusual case
                             Log.w(TAG, "User authenticated but no document exists")
-                            navigateToPreferences() // Send to preferences instead of login
+                            navigateToLogin() // Send to preferences instead of login
                         }
                     }
                 } catch (e: Exception) {
