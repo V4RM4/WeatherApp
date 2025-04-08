@@ -77,4 +77,31 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.10.1")
     implementation ("com.google.android.gms:play-services-base")
     implementation ("com.google.firebase:firebase-bom:33.11.0")
+    // JUnit dependencies for unit testing
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+
+// Mocking library for Kotlin (MockK)
+    testImplementation("io.mockk:mockk:1.12.0")
+
+// AndroidX Test dependencies for UI testing
+    testImplementation("androidx.test.ext:junit:1.1.3")  // For running tests with JUnit
+    testImplementation("androidx.test:core:1.4.0")      // Core test libraries for Android
+
+// Espresso for UI testing
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")   // Basic UI testing with Espresso
+    androidTestImplementation("androidx.test.espresso:espresso-idling-resource:3.4.0") // For handling async tasks during UI testing
+
+// Additional test dependencies for mocking Firebase or other external resources (if needed)
+    androidTestImplementation("com.google.firebase:firebase-auth-ktx:21.0.1") // Firebase authentication for mocking
+    androidTestImplementation("com.google.firebase:firebase-firestore-ktx:24.0.0") // Firebase Firestore for mocking
+
+// For testing Android Lifecycle components (optional but useful for lifecycle-dependent tests)
+    androidTestImplementation("androidx.arch.core:core-testing:2.1.0")  // For testing LiveData, ViewModels, etc.
+
+// For Kotlin Coroutines (useful if your code involves suspending functions or coroutines)
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")  // Coroutines for UI thread testing
+    testImplementation(kotlin("test"))
+
+
 }

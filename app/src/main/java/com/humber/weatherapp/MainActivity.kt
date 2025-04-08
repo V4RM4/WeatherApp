@@ -31,15 +31,15 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var auth: FirebaseAuth
-    private lateinit var credentialManager: CredentialManager
-    private val db = FirebaseFirestore.getInstance()
+    lateinit var auth: FirebaseAuth
+    lateinit var credentialManager: CredentialManager
+    var db = FirebaseFirestore.getInstance()
 
     // Define the notification permission string
     private val POST_NOTIFICATIONS = "android.permission.POST_NOTIFICATIONS"
 
     // Request permission launcher
-    private val requestPermissionLauncher = registerForActivityResult(
+    val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
         if (isGranted) {
@@ -72,7 +72,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun requestNotificationPermission() {
+    fun requestNotificationPermission() {
         // For Android 13 and higher, we need to request the POST_NOTIFICATIONS permission
         if (Build.VERSION.SDK_INT >= 33) { // API 33 is Android 13 (Tiramisu)
             when {
@@ -103,7 +103,7 @@ class MainActivity : ComponentActivity() {
     }
 
 
-    private fun setupGoogleSignIn() {
+    fun setupGoogleSignIn() {
         // Instantiate a Google sign-in request
         val googleIdOption = GetGoogleIdOption.Builder()
             .setServerClientId(getString(R.string.default_web_client_id))
@@ -150,7 +150,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun firebaseAuthWithGoogle(idToken: String) {
+    protected fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
@@ -168,7 +168,7 @@ class MainActivity : ComponentActivity() {
             }
     }
 
-    private fun initializeUser() {
+    fun initializeUser() {
         val currentUser = auth.currentUser ?: return
         val userRef = db.collection("users").document(currentUser.uid)
 
@@ -207,7 +207,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun redirectUser() {
+    fun redirectUser() {
         val currentUser = auth.currentUser ?: return
 
         db.collection("users").document(currentUser.uid).get()

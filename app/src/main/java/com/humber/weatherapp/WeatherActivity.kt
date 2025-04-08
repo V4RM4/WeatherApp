@@ -117,7 +117,7 @@ class WeatherActivity : ComponentActivity() {
         loadUserPreferences()
     }
 
-    private fun loadUserPreferences() {
+    fun loadUserPreferences() {
         val user = auth.currentUser
         if (user == null) {
             Toast.makeText(this, "User not authenticated", Toast.LENGTH_SHORT).show()
@@ -144,7 +144,7 @@ class WeatherActivity : ComponentActivity() {
             }
     }
 
-    private fun fetchWeatherData(city: String, preferences: Map<String, Boolean>) {
+    fun fetchWeatherData(city: String, preferences: Map<String, Boolean>) {
         WeatherRepository.fetchWeather(baseUrl, apiKey, this, city, 1) { weatherResponse ->
             if (weatherResponse != null) {
                 updateUI(preferences, weatherResponse, city)
@@ -154,7 +154,7 @@ class WeatherActivity : ComponentActivity() {
         }
     }
 
-    private fun updateUI(preferences: Map<String, Boolean>, weatherData: WeatherResponse, city: String) {
+    fun updateUI(preferences: Map<String, Boolean>, weatherData: WeatherResponse, city: String) {
         runOnUiThread {
             localDateTime.text = weatherData.location.localtime
             locationName.text = weatherData.location.name
