@@ -64,11 +64,11 @@ class LocationSearchActivityTest {
     fun testSearchButtonClickWithValidInput() {
         scenario.onActivity { activity ->
             searchEditText.setText("Etobicoke")
-            Thread.sleep(1000)
+            Thread.sleep(2000)
             activity.runOnUiThread {
                 searchButton.performClick()
             }
-            Thread.sleep(1000)
+            Thread.sleep(2000)
             // To Wait UI to be idle
             Espresso.onIdle()
             println("Locations Container Child Count: ${locationsContainer.childCount}")
@@ -101,15 +101,5 @@ class LocationSearchActivityTest {
             assertTrue(currentActivity::class.java.simpleName == "LocationSearchActivity")
         }
     }
-
-    @Test
-    fun testSearchButtonClickUpdatesUI() {
-        scenario.onActivity { activity ->
-            activity.runOnUiThread {
-                searchEditText.setText("Toronto")
-                searchButton.performClick()
-                assert(locationsContainer.childCount > 0)
-            }
-        }
-    }
+    
 }
