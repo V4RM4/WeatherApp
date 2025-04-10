@@ -4,16 +4,20 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import androidx.credentials.exceptions.ClearCredentialException
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.humber.weatherapp.databinding.ActivityHomeBinding
 import kotlinx.coroutines.launch
 
@@ -28,6 +32,8 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         homeBinding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(homeBinding.root)
+
+        loadAchievements()
 
         bottomNav = findViewById(R.id.bottom_navigation)
 
@@ -72,11 +78,6 @@ class HomeActivity : AppCompatActivity() {
             signOut()
         }
 
-        homeBinding.weatherStuffBtn.setOnClickListener{
-            val weatherIntent = Intent(this, WeatherActivity::class.java)
-            startActivity(weatherIntent)
-        }
-
         homeBinding.prefBtn.setOnClickListener{
             val prefIntent = Intent(this, PreferencesActivity::class.java)
             startActivity(prefIntent)
@@ -106,5 +107,29 @@ class HomeActivity : AppCompatActivity() {
         //Clear cache
         cacheDir.deleteRecursively()
 
+    }
+
+    private fun loadAchievements(){
+        val pointsHeader = findViewById<TextView>(R.id.pointsHeader)
+        val recyclerView = findViewById<RecyclerView>(R.id.achievementsRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            pointsHeader.text = "User not authenticated"
+            return
+        }
+        val db = FirebaseFirestore.getInstance()
+        val userDocRef = db.collection("users").document(user.uid)
+        userDocRef.get().addOnSuccessListener { document ->
+            val points = document.getLong("points")?.toInt() ?: 0
+            val unlockedAchievements = document.get("unlockedAchievements") as? List<String> ?: emptyList()
+
+            pointsHeader.text = "Total Points: $points"
+            val adapter = AchievementsAdapter(DailyRewardManager.achievementsList, unlockedAchievements)
+            recyclerView.adapter = adapter
+        }.addOnFailureListener {
+            pointsHeader.text = "Error loading achievements."
+        }
     }
 }

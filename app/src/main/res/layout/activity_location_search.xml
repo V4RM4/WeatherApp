@@ -11,7 +11,7 @@
         android:id="@+id/titleTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Search Weather Locations"
+        android:text="@string/search_weather_locations"
         android:textSize="24sp"
         android:padding="16dp"
         android:textStyle="bold"
@@ -37,12 +37,11 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/searchEditText"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Enter city, postal, latlong or IP"
+            android:hint="@string/city_postal_co_ords_or_ip"
             android:padding="12dp"
-            android:background="@android:color/white"
             android:textColor="@android:color/black"
             android:textColorHint="#757575"
             android:inputType="text"
