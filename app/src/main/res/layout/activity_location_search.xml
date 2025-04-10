@@ -37,12 +37,11 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/searchEditText"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Enter city, postal, latlong or IP"
+            android:hint="City, Postal, Co-ords or IP"
             android:padding="12dp"
-            android:background="@android:color/white"
             android:textColor="@android:color/black"
             android:textColorHint="#757575"
             android:inputType="text"
