@@ -3,7 +3,6 @@ package com.humber.weatherapp
 import android.widget.Button
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.google.android.material.button.MaterialButton
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
