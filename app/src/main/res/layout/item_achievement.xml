@@ -15,7 +15,7 @@
             android:id="@+id/achievementTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Achievement Title"
+            android:text="@string/achievement_title"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Achievement Description"
+            android:text="@string/achievement_description"
             android:textSize="16sp" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

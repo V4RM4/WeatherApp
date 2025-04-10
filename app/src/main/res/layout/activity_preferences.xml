@@ -21,7 +21,7 @@
                 android:id="@+id/enterCityTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Enter your home city, postal code, coordinates or IP address:"
+                android:text="@string/enter_your_home_city_postal_code_coordinates_or_ip_address"
                 android:textSize="18sp"/>
 
             <LinearLayout
@@ -36,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:inputType="text"
-                    android:hint="eg: Toronto"
+                    android:hint="@string/eg_toronto_"
                     android:layout_marginTop="8dp"
                     android:paddingTop="12dp"
                     android:paddingBottom="12dp"/>
@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Search"/>
+                    android:text="@string/search"/>
             </LinearLayout>
 
             <com.google.android.material.textview.MaterialTextView
@@ -66,7 +66,7 @@
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Select weather features to display:"
+                    android:text="@string/select_weather_features_to_display"
                     android:layout_marginTop="12dp"/>
 
                 <LinearLayout
@@ -76,7 +76,7 @@
 
                     <CheckBox
                         android:id="@+id/cboxFeelsLike"
-                        android:text="Feels Like"
+                        android:text="@string/feels_like"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="24dp"
@@ -85,7 +85,7 @@
 
                     <CheckBox
                         android:id="@+id/cboxWindSpeed"
-                        android:text="Wind Speed"
+                        android:text="@string/wind_speed"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="24dp"
@@ -94,7 +94,7 @@
 
                     <CheckBox
                         android:id="@+id/cboxAQI"
-                        android:text="AQI"
+                        android:text="@string/aqi"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="24dp"
@@ -109,7 +109,7 @@
 
                     <CheckBox
                         android:id="@+id/cboxPressure"
-                        android:text="Pressure"
+                        android:text="@string/pressure"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="12dp"
@@ -118,7 +118,7 @@
 
                     <CheckBox
                         android:id="@+id/cboxPrecip"
-                        android:text="Precipitation"
+                        android:text="@string/precipitation"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="12dp"
@@ -127,7 +127,7 @@
 
                     <CheckBox
                         android:id="@+id/cboxGust"
-                        android:text="Gust"
+                        android:text="@string/gust"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="12dp"
@@ -143,7 +143,7 @@
 
                     <CheckBox
                         android:id="@+id/cboxUV"
-                        android:text="UV"
+                        android:text="@string/uv"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="12dp"
@@ -152,7 +152,7 @@
 
                     <CheckBox
                         android:id="@+id/cboxHumid"
-                        android:text="Humidity"
+                        android:text="@string/humidity"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="12dp"
@@ -161,7 +161,7 @@
 
                     <CheckBox
                         android:id="@+id/cboxWindDir"
-                        android:text="Wind Direction"
+                        android:text="@string/wind_direction"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="12dp"
@@ -177,7 +177,7 @@
 
                     <CheckBox
                         android:id="@+id/cboxSunrise"
-                        android:text="Sunrise"
+                        android:text="@string/sunrise"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="12dp"
@@ -186,7 +186,7 @@
 
                     <CheckBox
                         android:id="@+id/cboxSunset"
-                        android:text="Sunset"
+                        android:text="@string/sunset"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="12dp"
@@ -195,7 +195,7 @@
 
                     <CheckBox
                         android:id="@+id/cboxVis"
-                        android:text="Visibility"
+                        android:text="@string/visibility"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="12dp"
@@ -209,7 +209,7 @@
 
                     <CheckBox
                         android:id="@+id/cboxDewPoint"
-                        android:text="Dew Point"
+                        android:text="@string/dew_point"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
@@ -218,7 +218,7 @@
 
                     <CheckBox
                         android:id="@+id/cboxChill"
-                        android:text="Wind Chill"
+                        android:text="@string/wind_chill"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="12dp"
@@ -227,7 +227,7 @@
 
                     <CheckBox
                         android:id="@+id/cboxHI"
-                        android:text="Heat Index"
+                        android:text="@string/heat_index"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="12dp"
@@ -236,7 +236,7 @@
 
                     <CheckBox
                         android:id="@+id/cboxCloud"
-                        android:text="Cloud Cover"
+                        android:text="@string/cloud_cover"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="12dp"
@@ -245,7 +245,7 @@
 
                     <CheckBox
                         android:id="@+id/cboxMoon"
-                        android:text="Moon Phase"
+                        android:text="@string/moon_phase"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="12dp"
